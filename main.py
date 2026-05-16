@@ -18,9 +18,15 @@ class Station:
         self.line = line
         self.operational = operational
         self.platforms = platforms
+        self.disrupted = False
+        self.delayed = False
 
     def get_status(self):
-        if self.operational:
+        if self.disrupted:
+            return "Disrupted"
+        elif self.delayed:
+            return "Delayed"
+        elif self.operational:
             return "Operational"
         else:
             return "Closed"
@@ -45,12 +51,17 @@ class Network:
      def show_connections(self):
           for n in self.connections:
                print(f"{n} → {", ".join(self.connections[n])}")
- 
 
-
-
-
-
+     def trigger_incident(self, station_name):
+          for n in self.stations:
+               if  n.name == station_name:
+                    n.disrupted = True
+                    for neighbor_name in self.connections[station_name]:
+                         for s in self.stations:
+                              if s.name == neighbor_name:
+                                   s.delayed = True
+               
+                         
 
 stations = [
     Station("Times Square", "A", True, 4),
@@ -62,5 +73,8 @@ stations = [
 
 
 network = Network(city, stations, connections)
+# network.describe()
+# network.show_connections()
+
+network.trigger_incident("Times Square")
 network.describe()
-network.show_connections()
