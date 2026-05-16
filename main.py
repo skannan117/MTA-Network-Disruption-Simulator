@@ -10,6 +10,7 @@ connections = {
 }
 
 
+
 # classes
 class Station:
     def __init__(self, name, line, operational, platforms):
@@ -28,6 +29,29 @@ class Station:
             print(f"- {self.name} | Line: {self.line} | Platforms: {self.platforms} | Status: {self.get_status()}")
 
 
+
+class Network:
+     def __init__(self, city, stations, connections):
+          self.city = city
+          self.stations = stations
+          self.connections = connections
+    
+     def describe(self):
+        print(f"Transit network: {self.city}")
+        print(f"Total stations: {len(self.stations)}")
+        for n in self.stations: 
+            n.describe()
+     
+     def show_connections(self):
+          for n in self.connections:
+               print(f"{n} → {", ".join(self.connections[n])}")
+ 
+
+
+
+
+
+
 stations = [
     Station("Times Square", "A", True, 4),
     Station("Grand Central", "B", True, 2),
@@ -36,5 +60,7 @@ stations = [
     Station("Fulton Street", "E", False, 4)
 ]
 
-for n in stations: 
-    n.describe()
+
+network = Network(city, stations, connections)
+network.describe()
+network.show_connections()
