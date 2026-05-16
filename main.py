@@ -10,19 +10,22 @@ stations = [
 ]
 
 
-total_stations = len(stations)
-
-
-# print statements
-print(f"Transit network: {city}")
-
-print(f"Total stations: {total_stations}")
-
-for n in stations:
-    if n["operational"]: 
-        status = "Operational"
+# function to determine if operational
+def get_status(operational):
+    if operational: 
+        return "Operational"
     else: 
-        status= "Closed" 
+        return "Closed"
+
+# function to print
+def print_network(city, stations): 
+    print(f"Transit network: {city}")
+
+    print(f"Total stations: {len(stations)}")
     
-    print(f"- {n['name']} | Line: {n['line']} | Platforms: {n['platforms']} | Status: {status}")
+    for n in stations:
+        print(f"- {n['name']} | Line: {n['line']} | Platforms: {n['platforms']} | Status: {get_status(n['operational'])}")
           
+
+# call function
+print_network(city, stations)
