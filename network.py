@@ -1,10 +1,14 @@
+import networkx as nx
 from station import Station
 
 class Network:
     def __init__(self, city, stations, connections):
           self.city = city
           self.stations = stations
-          self.connections = connections
+          self.graph = nx.Graph()
+          for station, neighbors in connections.items():
+               for neighbor in neighbors: 
+                    self.graph.add_edge(station, neighbor)
     
     def describe(self):
         print(f"Transit network: {self.city}")
@@ -13,14 +17,15 @@ class Network:
             n.describe()
      
     def show_connections(self):
-          for n in self.connections:
-               print(f"{n} → {", ".join(self.connections[n])}")
+          for station in self.graph.nodes:
+               neighbors = list(self.graph.neighbors(station))
+               print(f"{station} → {", ".join(neighbors)}")
 
     def trigger_incident(self, station_name):
           for n in self.stations:
                if  n.name == station_name:
                     n.disrupted = True
-                    for neighbor_name in self.connections[station_name]:
+                    for neighbor_name in self.graph.neighbors(station_name):
                          for s in self.stations:
                               if s.name == neighbor_name:
                                    s.delayed = True
